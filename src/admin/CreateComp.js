@@ -10,7 +10,8 @@ export default function CreateComp() {
     const title = useRef('');
     const subtitle = useRef('');
     const image = useRef('');
-    const passing = useRef('');
+    const passingGrade = useRef('');
+    const passingTop = useRef('')
     const mechanics = useRef("")
 
     const [criteria, setCriteria] = useState([]);
@@ -36,14 +37,17 @@ export default function CreateComp() {
         data.append('title', title.current.value);
         data.append('file', image.current.files[0]);
         data.append('subtitle', subtitle.current.value);
-        data.append('passing', passing.current.value);
+        data.append('passing-grade', passingGrade.current.value);
+        data.append('passing-top', passingTop.current.value);
         data.append('d-month', d_month.current.value);
         data.append('d-day', d_day.current.value);
         data.append('d-year', d_year.current.value);
+        data.append('d-hour', d_hour.current.value);
         data.append('d-phase', d_phase.current.value);
         data.append('a-month', a_month.current.value);
         data.append('a-day', a_day.current.value);
         data.append('a-year', a_year.current.value);
+        data.append('a-hour', a_hour.current.value);
         data.append('a-phase', a_phase.current.value);
         data.append('mechanics', mechanics.current.value);
 
@@ -58,9 +62,7 @@ export default function CreateComp() {
 
         data.append('criteria', allCriteria);
 
-        if (mechanics.current.value != '' && title.current.value != '' && subtitle.current.value != '' && 
-        d_month.current.value != '' && d_day.current.value != '' && d_hour.current.value != '' && d_year.current.value != '' && d_phase.current.value != '' 
-        && a_month.current.value != '' && a_day.current.value != "" && a_year.current.value != '' && a_hour.current.value != '' && a_phase.current.value != '' ) {
+    if (mechanics.current.value != '' && title.current.value != '' && subtitle.current.value != '' && criteria.length != 0) {
             fetch(baseUrl + '/add-competition', {
                 method:'POST',
                 body:data
@@ -75,24 +77,27 @@ export default function CreateComp() {
     }
     
     useEffect(() => {
-        setMessage(isSave);
-        title.current.value = '';
-        subtitle.current.value = '';
-        image.current.value = '';
-        passing.current.value = '';
-        mechanics.current.value = '';
-        
-        d_month.current.value = '';
-        d_day.current.value = '';
-        d_year.current.value = '';
-        d_hour.current.value = '';
-        d_phase.current.value = '';
-    
-        a_month.current.value = '';
-        a_day.current.value = '';
-        a_year.current.value = '';
-        a_hour.current.value = '';
-        a_phase.current.value = '';
+        if (message != "Saving...") {
+            setMessage(isSave);
+            title.current.value = '';
+            subtitle.current.value = '';
+            image.current.value = '';
+            passingGrade.current.value = '';
+            passingTop.current.value = '';
+            mechanics.current.value = '';
+            
+            d_month.current.value = 'Jan';
+            d_day.current.value = '1';
+            d_year.current.value = '2021';
+            d_hour.current.value = '01:00';
+            d_phase.current.value = 'AM';
+
+            a_month.current.value = 'Jan';
+            a_day.current.value = '1';
+            a_year.current.value = '2021';
+            a_hour.current.value = '11:00';
+            a_phase.current.value = 'PM';
+        }
     }, [isSave])
 
     const handleCriteria = () => {
@@ -148,7 +153,7 @@ export default function CreateComp() {
                     <div className="row g-2">
                         <div className="col-8">
                             <select class="form-select" ref={d_hour}>
-                                {calendar.hours.map((h) => <option value="h">{h}</option>)}
+                                {calendar.hours.map((h) => <option value={h}>{h}</option>)}
                             </select>
                         </div>
                         <div className="col-4">
@@ -181,7 +186,7 @@ export default function CreateComp() {
                     <div className="row g-2">
                         <div className="col-8">
                             <select class="form-select" ref={a_hour}>
-                                {calendar.hours.map((h) => <option value="h">{h}</option>)}
+                                {calendar.hours.map((h) => <option value={h}>{h}</option>)}
                             </select>
                         </div>
                         <div className="col-4">
@@ -212,20 +217,30 @@ export default function CreateComp() {
                             <input className='form-control' ref={per} placeholder='percent'/>
                         </div>
                         <div className="col-2">
-                            <button className='btn btn-light' onClick={handleCriteria}>Add</button>
+                            <button className='btn btn-dark' onClick={handleCriteria}>Add</button>
                         </div>
                     </div> 
                 </div>
-                <div className="mb-3">
-                    <label className="form-label">Passing Grade</label>    
-                    <input type="number" ref={passing} className="form-control mb-3"/>
+                <div className="row col-12 g-1 mb-3">
+                    <div className="col-6">
+                        <label className="form-label">Passing Grade</label>
+                    </div>
+                    <div className='col-6'>
+                        <input type="number" ref={passingGrade} className="form-control"/>
+                    </div>
+                    <div className="col-6">
+                        <label className="form-label col-10">Passing Top</label>   
+                    </div>
+                    <div className='col-6'>
+                        <input type="number" ref={passingTop} className="form-control col-2"/>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Mechanics</label>
                     <textarea class="form-control" ref={mechanics} id="exampleFormControlTextarea1" rows="3"></textarea>
                 </div>
                 <p className>{message}</p>
-                <button className="btn btn-outline-dark col-12" type="submit"><i class="fas fa-save"></i> Create</button>
+                <button className="btn btn-dark col-12" type="submit"><i class="fas fa-save"></i> Create</button>
             </form>
         </>
     )

@@ -9,19 +9,19 @@ export default function NavBar() {
                 <div className="nav">
                     <Link to="/" className="tab">
                         <i className="fas fa-home fa-2x"></i>
-                        {/* Home */}
+                        Home
                     </Link>
                     <Link to="/comp" className="tab">
                         <i className="fas fa-trophy fa-2x"></i>
-                        {/* Comp */}
+                        Comp
                     </Link>
                     <Link className="tab">
                         <i class="fas fa-headphones fa-2x"></i>
-                        {/* Play */}
+                        Play
                     </Link>
                     <Link to="/admin" className="tab">
                         <i className="fas fa-tools fa-2x"></i>
-                        {/* Admin */}
+                        Admin
                     </Link>
                 </div>
             </div>
