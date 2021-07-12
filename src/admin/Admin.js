@@ -11,7 +11,7 @@ const passwordForAdmin = 'rrcreators';
 
 export default function Admin() {
     const [page, setPage] = useState('');
-    const [is_allowed, setIs_Allowed] = useState(false);
+    const [is_allowed, setIs_Allowed] = useState(true);
     const passwordComp = useRef('')
     const passwordAdmin = useRef('');
 

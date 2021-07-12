@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect, useCallback} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import calendar from '../calendar';
 import baseUrl from '../basedata';
 
@@ -10,9 +10,9 @@ export default function CreateComp() {
     const title = useRef('');
     const subtitle = useRef('');
     const image = useRef('');
-    const passingGrade = useRef('');
-    const passingTop = useRef('')
-    const mechanics = useRef("")
+    const mechanics = useRef("");
+    const constraint = useRef();
+    const constraintValue = useRef();
 
     const [criteria, setCriteria] = useState([]);
     const crit = useRef('');
@@ -37,8 +37,8 @@ export default function CreateComp() {
         data.append('title', title.current.value);
         data.append('file', image.current.files[0]);
         data.append('subtitle', subtitle.current.value);
-        data.append('passing-grade', passingGrade.current.value);
-        data.append('passing-top', passingTop.current.value);
+        data.append('constraint', constraint.current.value);
+        data.append('constraintValue', constraintValue.current.value)
         data.append('d-month', d_month.current.value);
         data.append('d-day', d_day.current.value);
         data.append('d-year', d_year.current.value);
@@ -63,42 +63,40 @@ export default function CreateComp() {
         data.append('criteria', allCriteria);
 
     if (mechanics.current.value != '' && title.current.value != '' && subtitle.current.value != '' && criteria.length != 0) {
+            setMessage('Saving..')
+
             fetch(baseUrl + '/add-competition', {
                 method:'POST',
                 body:data
             })
             .then(response => response.json())
-            .then(res => setIsSave(res.response));
+            .then(res => {
+                setMessage(res.response);
+                if (res.response == 'New Competition has been created') {
+                    title.current.value = '';
+                    subtitle.current.value = '';
+                    image.current.value = '';
+                    mechanics.current.value = '';
+                    constraintValue.current.value = '';
+                    
+                    d_month.current.value = 'Jan';
+                    d_day.current.value = '1';
+                    d_year.current.value = '2021';
+                    d_hour.current.value = '01:00';
+                    d_phase.current.value = 'AM';
 
-            setMessage('Saving..')
+                    a_month.current.value = 'Jan';
+                    a_day.current.value = '1';
+                    a_year.current.value = '2021';
+                    a_hour.current.value = '11:00';
+                    a_phase.current.value = 'PM';
+                }
+            });
         } else {
             setMessage('Fill all the input field')
         }
     }
     
-    useEffect(() => {
-        if (message != "Saving...") {
-            setMessage(isSave);
-            title.current.value = '';
-            subtitle.current.value = '';
-            image.current.value = '';
-            passingGrade.current.value = '';
-            passingTop.current.value = '';
-            mechanics.current.value = '';
-            
-            d_month.current.value = 'Jan';
-            d_day.current.value = '1';
-            d_year.current.value = '2021';
-            d_hour.current.value = '01:00';
-            d_phase.current.value = 'AM';
-
-            a_month.current.value = 'Jan';
-            a_day.current.value = '1';
-            a_year.current.value = '2021';
-            a_hour.current.value = '11:00';
-            a_phase.current.value = 'PM';
-        }
-    }, [isSave])
 
     const handleCriteria = () => {
         let critlist = [...criteria];
@@ -109,9 +107,18 @@ export default function CreateComp() {
         });
         setCriteria([...critlist]);
         
-        console.log(criteria)
         crit.current.value = '';
         per.current.value = '';
+    }
+
+    const deleteCriteria = name => {
+        let newCriteria = [];
+        for (let i=0; i<criteria.length; i++) {
+            if (criteria[i].ct != name) {
+                newCriteria.push(criteria[i])
+            } 
+        }
+        setCriteria([...newCriteria])
     }
 
     return (
@@ -200,12 +207,15 @@ export default function CreateComp() {
                 <div className="mb-3">
                     <label className="form-label">Criteria</label>
                         {criteria.map((c) => 
-                            <div className="row col-12">
-                                <div className="col-8">
+                            <div className="row col-12 g-2">
+                                <div className="col-6">
                                     {c.ct}
                                 </div>
                                 <div className="col-4">
                                     {c.pr} %
+                                </div>
+                                <div className='col-2'>
+                                    <button className="btn btn-danger col-12" onClick={(name) => deleteCriteria(c.ct)}>Del</button>
                                 </div>
                             </div>
                         )}
@@ -217,22 +227,19 @@ export default function CreateComp() {
                             <input className='form-control' ref={per} placeholder='percent'/>
                         </div>
                         <div className="col-2">
-                            <button className='btn btn-dark' onClick={handleCriteria}>Add</button>
+                            <button className='btn btn-primary col-12' onClick={handleCriteria}>Add</button>
                         </div>
                     </div> 
                 </div>
                 <div className="row col-12 g-1 mb-3">
-                    <div className="col-6">
-                        <label className="form-label">Passing Grade</label>
+                    <div className='col-8'>
+                        <select class="form-select mb-2" ref={constraint} aria-label="Default select example">
+                            <option value='Top Rank'>Top Rank</option>
+                            <option value='Passing Grade'>Passing Grade</option>
+                        </select>
                     </div>
-                    <div className='col-6'>
-                        <input type="number" ref={passingGrade} className="form-control"/>
-                    </div>
-                    <div className="col-6">
-                        <label className="form-label col-10">Passing Top</label>   
-                    </div>
-                    <div className='col-6'>
-                        <input type="number" ref={passingTop} className="form-control col-2"/>
+                    <div className='col-4'>
+                        <input type='number' ref={constraintValue} className='form-control' placeholder='value'/>
                     </div>
                 </div>
                 <div class="mb-3">

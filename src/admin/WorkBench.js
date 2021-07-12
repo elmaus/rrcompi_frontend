@@ -3,7 +3,6 @@ import AddMember from './AddMember'
 import CreateComp from './CreateComp'
 import EditCompetition from './EditCompetition'
 import EditMember from './EditMember'
-import EditRound from './EditRound'
 
 export default function WorkBench(props) {
     if (props.value == 'create-competition') {
@@ -12,10 +11,7 @@ export default function WorkBench(props) {
         return <EditCompetition/>
     }else if (props.value == 'add-member') {
         return <AddMember/>
-    } else if (props.value == 'edit-round') {
-        return <EditRound/>
-    }
-    else if (props.value == 'edit-member') {
+    }else if (props.value == 'edit-member') {
         return <EditMember/>
     }
     return (

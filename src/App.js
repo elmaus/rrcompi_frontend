@@ -14,6 +14,8 @@ import EntryForm from './comp/EntryForm';
 import JudgeRegistrationForm from './comp/JudgeRegistrationForm';
 import ScoreSheetMain from './comp/scoresheet/ScoreSheetMain';
 import MemberRegistrationForm from './admin/MemberRegistrationForm';
+import EditCompetition from './admin/EditCompetition';
+
 
 function App() {
 
@@ -46,6 +48,9 @@ function App() {
                         </Route>
                         <Route exact path='/member-register'>
                             <MemberRegistrationForm/>
+                        </Route>
+                        <Route exact path='/edit-competition'>
+                            <EditCompetition/>
                         </Route>
                     </Switch>
                 </div>
