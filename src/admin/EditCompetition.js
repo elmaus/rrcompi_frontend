@@ -75,8 +75,8 @@ export default function EditCompetition() {
         if (comp) {
             title.current.value = comp.title
             subtitle.current.value = comp.subtitle;
-            // isActive.current.value = comp.isActive;
-            // limit.current.value = comp.limit;
+            isActive.current.value = comp.isActive;
+            limit.current.value = comp.limit;
             
             constraint.current.value = comp.constraint;
             constraintValue.current.value = comp.constraintValue;
@@ -230,19 +230,19 @@ export default function EditCompetition() {
                         <input type="file" ref={image} className="form-control"/>
                     </div>
                     <div className='mb-3 g-1 row'>
-                        {/* <div className='col-2'>
+                        <div className='col-2'>
                             <select className='form-select' ref={isActive} aria-label="Default select example">
                                 <option disabled value={isActive.current.value}>{isActive.current.value}</option>
                                 <option value='Open'>Open</option>
                                 <option value='Closed'>Closed</option>
                             </select>
-                        </div> */}
+                        </div>
                         <div className="col-4">
                             <label className='form-label text-right'>Contender Limit</label>
                         </div>
-                        {/* <div className='col-2'>
+                        <div className='col-2'>
                             <input type='number' ref={limit} className='form-control'/>
-                        </div> */}
+                        </div>
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Title</label>    
